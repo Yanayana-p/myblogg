@@ -1,19 +1,18 @@
 import { Link } from "react-router-dom";
+import "./AppNavbar.css";
 
 export default function AppNavbar({ currentUser }) {
   return (
-    <nav
-      className="navbar navbar-expand-lg navbar-dark shadow-lg rounded-4 px-4 py-2 mb-4"
-      style={{ background: "linear-gradient(135deg, #6f86d6, #48c6ef)" }}
-    >
+    <nav className="navbar navbar-expand-lg app-navbar">
+      
       {/* Brand */}
-      <Link className="navbar-brand fw-bold" to="/">
+      <Link className="navbar-brand app-brand" to="/">
         MyBlog
       </Link>
 
-      {/* Toggler for mobile */}
+      {/* Toggler */}
       <button
-        className="navbar-toggler"
+        className="navbar-toggler app-toggler"
         type="button"
         data-bs-toggle="collapse"
         data-bs-target="#navbarNav"
@@ -21,42 +20,32 @@ export default function AppNavbar({ currentUser }) {
         <span className="navbar-toggler-icon"></span>
       </button>
 
-      {/* Navbar Links */}
+      {/* Links */}
       <div className="collapse navbar-collapse" id="navbarNav">
-        <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+        <ul className="navbar-nav me-auto app-nav-links">
           <li className="nav-item">
-            <Link className="nav-link fw-semibold" to="/">
-              Home
-            </Link>
+            <Link className="nav-link" to="/">Home</Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link fw-semibold" to="/about">
-              About
-            </Link>
+            <Link className="nav-link" to="/about">About</Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link fw-semibold" to="/services">
-              Blogs
-            </Link>
+            <Link className="nav-link" to="/services">Blogs</Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link fw-semibold" to="/contact">
-              Contact
-            </Link>
+            <Link className="nav-link" to="/contact">Contact</Link>
           </li>
         </ul>
 
-        {/* User Links */}
-        <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+        {/* Auth */}
+        <ul className="navbar-nav ms-auto app-auth">
           {currentUser ? (
             <>
-              <li className="nav-item">
-                <span className="nav-link text-light">
-                  Hi, <strong>{currentUser}</strong>
-                </span>
+              <li className="nav-item app-user">
+                Hi, <strong>{currentUser}</strong>
               </li>
               <li className="nav-item">
-                <Link className="nav-link btn btn-outline-light btn-sm ms-2 rounded-3" to="/logout">
+                <Link className="btn app-btn" to="/logout">
                   Logout
                 </Link>
               </li>
@@ -64,12 +53,12 @@ export default function AppNavbar({ currentUser }) {
           ) : (
             <>
               <li className="nav-item">
-                <Link className="nav-link btn btn-outline-light btn-sm rounded-3 me-2" to="/login">
+                <Link className="btn app-btn" to="/login">
                   Login
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link btn btn-outline-light btn-sm rounded-3" to="/register">
+                <Link className="btn app-btn" to="/register">
                   Register
                 </Link>
               </li>

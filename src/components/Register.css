@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono&family=Syne:wght@800&display=swap');
+
+/* PAGE BACKGROUND - Vintage Cream instead of Sage */
+.register-page {
+  background-color: #fdf6e3; 
+  font-family: 'Space Mono', monospace;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* CARD - Thick borders and Hard Shadows */
+.register-card {
+  width: 100%;
+  max-width: 400px;
+  background-color: #ffffff;
+  border-radius: 0px; /* Sharp edges for a more editorial look */
+  border: 3px solid #2b2b2b;
+  position: relative;
+  /* The signature Neo-Brutalist shadow */
+  box-shadow: 12px 12px 0px #2b2b2b; 
+  padding: 2.5rem 1.5rem;
+}
+
+/* CHECKERBOARD TOP ACCENT - Replacing the diagonal stripes */
+.register-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 16px;
+  width: 100%;
+  background-image: radial-gradient(#ff6b6b 20%, transparent 20%);
+  background-size: 10px 10px;
+  background-color: #fff;
+  border-bottom: 3px solid #2b2b2b;
+}
+
+/* TITLE - Bold & Lowercase */
+.register-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  color: #2b2b2b;
+  font-size: 2.2rem;
+  text-transform: lowercase;
+  margin-bottom: 1.5rem;
+  line-height: 1;
+}
+
+/* LABELS - Bold and Small */
+.register-card .form-label {
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #2b2b2b;
+  letter-spacing: 1px;
+}
+
+/* INPUTS - High contrast and sharp */
+.register-card .form-control {
+  border-radius: 0px;
+  border: 2px solid #2b2b2b;
+  background-color: #fff;
+  padding: 0.7rem;
+  font-size: 0.9rem;
+  transition: all 0.1s ease;
+}
+
+.register-card .form-control:focus {
+  background-color: #fdfd96; /* Pops yellow on focus */
+  border-color: #2b2b2b;
+  box-shadow: 4px 4px 0px #2b2b2b;
+  outline: none;
+}
+
+/* REGISTER BUTTON - The 'Pill' Style */
+.register-btn {
+  background-color: #ff6b6b; /* Bright Coral */
+  border: 2px solid #2b2b2b;
+  border-radius: 50px; /* Pill shape contrast with square card */
+  padding: 0.8rem;
+  color: #2b2b2b;
+}
