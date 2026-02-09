@@ -42,7 +42,7 @@ export default function AppNavbar({ currentUser }) {
           {currentUser ? (
             <>
               <li className="nav-item app-user">
-                Hi, <strong>{currentUser}</strong>
+                Hi, <strong>{currentUser.name}</strong>
               </li>
               <li className="nav-item">
                 <Link className="btn app-btn" to="/logout">

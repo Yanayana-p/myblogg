@@ -1,49 +1,45 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import "./Register.css";
+import './Register.css';
+import api from '../api'; // axios instance
 
-const Register = () => {
+const Register = ({ onRegister }) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
-  const API_URL = 'http://localhost:5000/api/auth/register';
-
   const handleRegister = async (e) => {
     e.preventDefault();
     setMessage('');
 
     try {
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, email, password }),
-      });
+      // Send POST request to backend
+      const res = await api.post('/auth/register', { username, email, password });
 
-      const data = await response.json();
+      // Optionally, backend can return user data
+      const userData = res.data.user;
 
-      if (response.ok) {
-        setMessage('Registration successful! Redirecting to login...');
-        setTimeout(() => navigate('/login'), 1500);
-      } else {
-        setMessage(`Error: ${data.message || 'Registration failed.'}`);
-      }
+      // Store user in localStorage if you want auto-login
+      if (userData) localStorage.setItem('user', JSON.stringify(userData));
+
+      setMessage('Registration successful! Redirecting to login...');
+
+      setTimeout(() => navigate('/login'), 1500);
     } catch (err) {
       console.error(err);
-      setMessage('Cannot connect to server.');
+
+      setMessage(err.response?.data?.message || 'Cannot connect to server.');
     }
   };
 
-  const alertClass = message.includes('successful')
-    ? 'alert-success'
-    : 'alert-danger';
+  const alertClass = message.includes('successful') ? 'alert-success' : 'alert-danger';
 
   return (
     <div className="register-page d-flex justify-content-center align-items-center vh-100">
-      <div className="card register-card p-4 shadow-lg">
-        <h2 className="register-title text-center mb-4">
+      <div className="card register-card p-4 shadow-lg" style={{ maxWidth: '400px', width: '100%' }}>
+        <h2 className="register-title text-center mb-4 fw-bold">
           Register Account
         </h2>
 
@@ -100,10 +96,21 @@ const Register = () => {
           </div>
 
           <div className="d-grid mt-4">
-            <button type="submit" className="btn register-btn fw-bold">
+            <button type="submit" className="btn btn-success fw-bold">
               Register
             </button>
           </div>
+
+          <p className="mt-3 text-center">
+            Already have an account?
+            <span
+              className="text-primary text-decoration-underline ms-1"
+              style={{ cursor: 'pointer' }}
+              onClick={() => navigate('/login')}
+            >
+              Login here
+            </span>
+          </p>
         </form>
       </div>
     </div>
