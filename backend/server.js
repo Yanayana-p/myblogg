@@ -1,90 +1,132 @@
+// ----- Imports -----
 const express = require("express");
-const path = require("path");
-const helmet = require("helmet");
 const cors = require("cors");
+const { connectDB, getDB } = require("./db");
+
+// ----- Routers -----
+const dashboardRoutes = require("./routes/dashboard");
+const postsRoutes = require("./routes/posts");
 
 const app = express();
-const PORT = process.env.PORT || 5000;
-
-// ----- Security Headers -----
-app.disable("x-powered-by");          // hide Express
-app.use(helmet());                     // default headers
-app.use(helmet.noSniff());             // X-Content-Type-Options
-app.use(helmet.frameguard({ action: "deny" })); // prevent clickjacking
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["'self'", "data:"],
-      objectSrc: ["'none'"],
-      frameAncestors: ["'none'"],
-    },
-  })
-);
+const PORT = 5000;
 
 // ----- Middleware -----
 app.use(express.json());
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
-// CORS for frontend development 
-app.use(
-  cors({
-    origin: ["http://localhost:3000"], // React dev server
-    methods: ["GET", "POST"],
-    credentials: true,
-  })
-);
+// =====================
+// AUTH ROUTES
+// =====================
 
-// ----- API Routes -----
-
-// Test route
-app.get("/api/hello", (req, res) => {
-  res.json({ message: "Hello from backend 👋" });
-});
-
-// Login route
-app.post("/api/auth/login", (req, res) => {
-  const { email, password } = req.body;
-  const users = [
-    { email: "test@example.com", password: "123456", name: "Diana" },
-  ];
-
-  const user = users.find((u) => u.email === email && u.password === password);
-  if (user) {
-    const { password, ...userData } = user;
-    return res.json({ user: userData });
-  } else {
-    return res.status(401).json({ message: "Invalid email or password" });
-  }
-});
-
-// Register route
-app.post("/api/auth/register", (req, res) => {
+// ----- REGISTER -----
+app.post("/api/auth/register", async (req, res) => {
   const { username, email, password } = req.body;
 
   if (!username || !email || !password) {
-    return res.status(400).json({ message: "All fields are required" });
+    return res.status(400).json({ message: "All fields required" });
   }
 
-  const user = { name: username, email };
-  return res.status(201).json({ user, message: "User registered successfully" });
+  try {
+    const db = getDB();
+    const existing = await db.collection("users").findOne({ email });
+
+    if (existing) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
+
+    const result = await db.collection("users").insertOne({
+      username,
+      email,
+      password, // (we’ll hash later)
+      isAdmin: false,
+      createdAt: new Date(),
+    });
+
+    res.status(201).json({
+      user: {
+        _id: result.insertedId,
+        username,
+        email,
+        isAdmin: false,
+      },
+      message: "Registered successfully",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
-// ----- Serve React frontend -----
-app.use(express.static(path.join(__dirname, "build")));
+// ----- LOGIN -----
+app.post("/api/auth/login", async (req, res) => {
+  const { email, password } = req.body;
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
+  try {
+    const db = getDB();
+    const user = await db.collection("users").findOne({ email, password });
+
+    if (!user) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    res.json({
+      user: {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        isAdmin: user.isAdmin || false,
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
-// ----- Error handler -----
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).json({ message: "Internal Server Error" });
+// =====================
+// CONTACT ROUTE
+// =====================
+app.post("/api/contact", async (req, res) => {
+  const { name, email, message } = req.body;
+
+  if (!name || !email || !message) {
+    return res.status(400).json({ message: "All fields required" });
+  }
+
+  try {
+    const db = getDB();
+    await db.collection("contacts").insertOne({
+      name,
+      email,
+      message,
+      createdAt: new Date(),
+    });
+
+    res.status(201).json({ message: "Message sent!" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
-// ----- Start Server -----
-app.listen(PORT, () => {
-  console.log(`Secure server running on http://localhost:${PORT}`);
-});
+const adminRoutes = require("./routes/admin");
+
+app.use("/api/admin", adminRoutes);
+
+
+// =====================
+// API ROUTES
+// =====================
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/posts", postsRoutes);
+
+// =====================
+// START SERVER
+// =====================
+connectDB()
+  .then(() => {
+    app.listen(PORT, () =>
+      console.log(`✅ Server running on http://localhost:${PORT}`)
+    );
+  })
+  .catch((err) => console.error("❌ Failed to connect to DB:", err));

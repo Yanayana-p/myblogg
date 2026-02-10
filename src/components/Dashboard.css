@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@800&display=swap');
+
+.dashboard {
+  font-family: "Space Mono", monospace;
+  color: #2b2b2b;
+  background-color: #fdf6e3; /* vintage cream */
+  min-height: 100vh;
+  padding: 60px 20px;
+}
+
+/* USER INFO - standout box */
+.user-info {
+  background: #ff6b6b; 
+  color: #fff; 
+  border: 3px solid #2b2b2b;
+  box-shadow: 8px 8px 0 #2b2b2b; 
+  padding: 30px;
+  margin-bottom: 50px;
+  text-align: left;
+  border-radius: 5px;
+}
+
+.user-info h2 {
+  font-family: "Syne", sans-serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin-bottom: 0.5rem;
+  text-transform: lowercase;
+}
+
+.user-info p {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+
+/* STATS SECTION */
+.dashboard-stats {
+  margin-bottom: 50px;
+}
+
+.dashboard-stats h3 {
+  font-family: "Syne", sans-serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin-bottom: 30px;
+  text-transform: lowercase;
+}
+
+.stat-card {
+  background: #fff;
+  border: 3px solid #2b2b2b;
+  box-shadow: 6px 6px 0 #2b2b2b;
+  padding: 30px;
+  text-align: center;
+  border-radius: 0;
+  transition: all 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 10px 10px 0 #2b2b2b;
+}
+
+.stat-card h4 {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* RECENT ACTIVITY */
+.recent-activity h3 {
+  font-family: "Syne", sans-serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin-bottom: 30px;
+  text-transform: lowercase;
+}
+
+.activity-card {
+  background: #fff;
+  border: 3px solid #2b2b2b;
+  box-shadow: 6px 6px 0 #2b2b2b;
+  border-radius: 0;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  transition: all 0.2s ease;
+}
+
+.activity-card:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 10px 10px 0 #2b2b2b;
+}
+
+.activity-card h5 {
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.activity-card a.btn {
+  align-self: flex-start;
+  pointer-events: auto;
+  border-color: #ff6b6b;
+  color: #ff6b6b;
+}
+
+.activity-card a.btn:hover {
+  background-color: #ff6b6b;
+  color: #fff;
+}
+
+/* RESPONSIVE */
+@media (max-width: 992px) {
+  .dashboard {
+    padding: 40px 15px;
+  }
+
+  .stat-card, .activity-card {
+    box-shadow: 4px 4px 0 #2b2b2b;
+  }
+}

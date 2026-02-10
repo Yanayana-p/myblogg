@@ -1,8 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono&family=Syne:wght@800&display=swap');
 
-/* ===== NEO-BRUTALIST LOGIN THEME ===== */
 .floral-login {
-  background-color: #fdf6e3; /* Cream background from reference */
+  background-color: #fdf6e3; 
   font-family: 'Space Mono', monospace;
   min-height: 100vh;
   display: flex;
@@ -11,19 +10,17 @@
   padding: 20px;
 }
 
-/* Card: Now with "Hard Shadow" and thick borders */
 .floral-login .card {
   background: #ffffff;
-  border-radius: 0px; /* Sharp corners or very slight 4px radius looks more 'editorial' */
-  border: 3px solid #2b2b2b; /* Thick black border */
-  box-shadow: 12px 12px 0px #2b2b2b; /* Solid, offset shadow - No blur */
+  border-radius: 0px; 
+  border: 3px solid #2b2b2b; 
+  box-shadow: 12px 12px 0px #2b2b2b; 
   max-width: 400px;
   width: 100%;
   position: relative;
   padding: 3rem 2rem;
 }
 
-/* Checkerboard top accent (Replaces the thin stripe) */
 .floral-login .card::before {
   content: "";
   position: absolute;
@@ -40,18 +37,17 @@
   border-bottom: 3px solid #2b2b2b;
 }
 
-/* Title: Syne font for that "Wild Stems" look */
+
 .floral-login h2 {
   font-family: "Syne", sans-serif;
   font-weight: 800;
   color: #2b2b2b;
   text-transform: lowercase;
-  text-align: left; /* Asymmetric looks more professional */
+  text-align: left; 
   margin-bottom: 2rem;
   font-size: 2.2rem;
 }
 
-/* Inputs: Hard borders and solid backgrounds */
 .floral-login .form-control {
   border-radius: 0px;
   border: 2px solid #2b2b2b;
@@ -61,15 +57,14 @@
 }
 
 .floral-login .form-control:focus {
-  background-color: #fdfd96; /* Pastel yellow focus for a 'pop' */
+  background-color: #fdfd96; 
   border-color: #2b2b2b;
   box-shadow: 4px 4px 0px #2b2b2b;
   outline: none;
 }
 
-/* Button: High contrast "Pill" style */
 .floral-login .btn-success {
-  background-color: #d1e7ff !important; /* Pastel Blue */
+  background-color: #d1e7ff !important; 
   color: #2b2b2b !important;
   border: 2px solid #2b2b2b !important;
   border-radius: 50px !important;
@@ -86,10 +81,9 @@
 .floral-login .btn-success:hover {
   transform: translate(-2px, -2px);
   box-shadow: 7px 7px 0px #2b2b2b;
-  background-color: #ff6b6b !important; /* Changes to Coral on hover */
+  background-color: #ff6b6b !important; 
 }
 
-/* Labels */
 .floral-login label {
   font-weight: bold;
   font-size: 0.8rem;

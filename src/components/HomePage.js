@@ -1,7 +1,32 @@
 import "../components/HomePage.css";
-
+import { Link } from "react-router-dom";
 
 export default function HomePage() {
+
+  const featuredPosts = [
+    {
+      id: 1,
+      title: "What I Learned Building My First Full-Stack App",
+      excerpt:
+        "From broken servers to small wins—lessons, mistakes, and growth from my first real project.",
+      link: "/post/first-fullstack-app",
+    },
+    {
+      id: 2,
+      title: "MongoDB vs SQL: What I Used as a Student Developer",
+      excerpt:
+        "A beginner-friendly comparison based on real project experience and trial-and-error.",
+      link: "/post/mongodb-vs-sql",
+    },
+    {
+      id: 3,
+      title: "Mistakes I Made Learning Web Development",
+      excerpt:
+        "Common beginner errors, misconceptions, and what I wish I knew earlier.",
+      link: "/post/web-dev-mistakes",
+    },
+  ];
+
   return (
     <div className="homepage">
 
@@ -10,11 +35,15 @@ export default function HomePage() {
         <div className="container text-center text-white">
           <h1 className="hero-title">Welcome to the Artful Dev</h1>
           <p className="hero-subtitle">
-            Thoughts, tutorials, stories, and ideas about life, tech, and creativity.
+            A student’s journey through code, creativity, and continuous learning.
           </p>
-          <button className="btn btn-light btn-lg rounded-pill px-4">
+
+          <Link
+            to={featuredPosts[0].link}
+            className="btn btn-light btn-lg rounded-pill px-4"
+          >
             Explore Blog
-          </button>
+          </Link>
         </div>
       </section>
 
@@ -22,27 +51,30 @@ export default function HomePage() {
       <section className="intro-section container">
         <h2>A Place to Learn & Reflect</h2>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
-          habitant morbi tristique senectus et netus et malesuada fames ac turpis
-          egestas. Vestibulum tortor quam, feugiat vitae.
+          A quiet corner of the internet where I document lessons learned,
+          challenges faced, and growth experienced while building projects
+          and learning new technologies.
         </p>
       </section>
 
       {/* FEATURED POSTS */}
       <section className="featured-section container">
         <h2 className="section-title">Featured Posts</h2>
+
         <div className="row g-4">
-          {[1, 2, 3].map((post) => (
-            <div key={post} className="col-md-4">
+          {featuredPosts.map((post) => (
+            <div key={post.id} className="col-md-4">
               <div className="post-card">
-                <h5>Blog Post Title {post}</h5>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Integer nec odio. Praesent libero.
-                </p>
-                <button className="btn btn-outline-primary btn-sm rounded-pill">
-                  Read More
-                </button>
+                <h5>{post.title}</h5>
+
+                <p>{post.excerpt}</p>
+
+                <Link
+                  to={post.link}
+                  className="btn btn-outline-primary btn-sm rounded-pill"
+                >
+                  Read More →
+                </Link>
               </div>
             </div>
           ))}
@@ -52,24 +84,27 @@ export default function HomePage() {
       {/* CATEGORIES */}
       <section className="categories-section">
         <div className="container">
-          <h2 className="section-title">Explore Categories</h2>
+          <h2 className="section-title">Explore Topics</h2>
+
           <div className="row g-4">
             <div className="col-md-4">
               <div className="category-card">
-                <h4>Technology</h4>
-                <p>Coding tutorials, tools, and digital trends.</p>
+                <h4>Learning Journey</h4>
+                <p>Progress, struggles, and lessons from studying and building.</p>
               </div>
             </div>
+
             <div className="col-md-4">
               <div className="category-card">
-                <h4>Personal Stories</h4>
-                <p>Life experiences, reflections, and lessons.</p>
+                <h4>Technology</h4>
+                <p>Web development, databases, security, and tools.</p>
               </div>
             </div>
+
             <div className="col-md-4">
               <div className="category-card">
                 <h4>Tutorials</h4>
-                <p>Step-by-step guides designed to help you learn faster.</p>
+                <p>Step-by-step guides and beginner-friendly explanations.</p>
               </div>
             </div>
           </div>
@@ -81,8 +116,9 @@ export default function HomePage() {
         <div className="container text-center">
           <h2>Stay Updated</h2>
           <p>
-            Subscribe to get the latest posts delivered straight to your inbox.
+            Subscribe to follow my learning journey and get new posts as they’re published.
           </p>
+
           <div className="newsletter-form">
             <input type="email" placeholder="Enter your email" />
             <button className="btn btn-primary">Subscribe</button>
@@ -90,7 +126,6 @@ export default function HomePage() {
         </div>
       </section>
 
-    
     </div>
   );
 }

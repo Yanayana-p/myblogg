@@ -1,11 +1,11 @@
-// src/api.js
-import axios from 'axios';
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api', // your backend base URL
+  baseURL: "http://localhost:5000/api", // backend
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
+  withCredentials: true, // allow CORS requests with credentials
 });
 
 export default api;

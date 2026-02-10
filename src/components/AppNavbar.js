@@ -35,6 +35,13 @@ export default function AppNavbar({ currentUser }) {
           <li className="nav-item">
             <Link className="nav-link" to="/contact">Contact</Link>
           </li>
+
+          {/* Show Admin link only for admins */}
+          {currentUser?.isAdmin && (
+            <li className="nav-item">
+              <Link className="nav-link" to="/admin">Admin</Link>
+            </li>
+          )}
         </ul>
 
         {/* Auth */}
@@ -42,7 +49,7 @@ export default function AppNavbar({ currentUser }) {
           {currentUser ? (
             <>
               <li className="nav-item app-user">
-                Hi, <strong>{currentUser.name}</strong>
+                Hi, <strong>{currentUser.username || currentUser.name}</strong>
               </li>
               <li className="nav-item">
                 <Link className="btn app-btn" to="/logout">

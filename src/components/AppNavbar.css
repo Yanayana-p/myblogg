@@ -1,9 +1,9 @@
-/* Google Font – closest to the cute handwritten vibe */
+
 @import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Poppins:wght@300;400;500&display=swap');
 
 /* Navbar container */
 .app-navbar {
-  background-color: #f6f1e8; /* soft cream */
+  background-color: #f6f1e8; 
   border-bottom: 2px solid #e2d6c2;
   padding: 0.8rem 1.5rem;
   font-family: 'Poppins', sans-serif;
@@ -33,13 +33,13 @@
 
 /* Hover = pill highlight */
 .app-nav-links .nav-link:hover {
-  background-color: #dfe8d8; /* pastel green */
+  background-color: #dfe8d8; 
   color: #2f2f2f !important;
 }
 
-/* Active feel (optional if you add NavLink later) */
+
 .app-nav-links .nav-link.active {
-  background-color: #f2c9b6; /* soft peach */
+  background-color: #f2c9b6; 
 }
 
 /* Toggler */

@@ -1,39 +1,61 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './Login.css';  // Login.css is in the same folder
-import api from '../api'; // axios instance
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./Login.css"; // Login.css is in the same folder
+import api from "../api"; // Axios instance with baseURL: http://localhost:5000/api
 
 const Login = ({ onLogin }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setMessage('');
+    setMessage("");
 
     try {
-      const res = await api.post('/auth/login', { email, password });
+      // Call backend login endpoint
+      const res = await api.post("/auth/login", { email, password });
       const userData = res.data.user;
 
-      localStorage.setItem('user', JSON.stringify(userData));
+      if (!userData) {
+        setMessage("Login failed. Please try again.");
+        return;
+      }
 
-      if (onLogin) onLogin(userData.email);
+      // Save user session to localStorage
+      localStorage.setItem("user", JSON.stringify(userData));
+      if (onLogin) onLogin(userData);
 
-      setMessage('Login successful! Redirecting...');
-      setTimeout(() => navigate('/home'), 1500);
+      setMessage("Login successful! Redirecting...");
+
+      // Redirect based on role
+      setTimeout(() => {
+        if (userData.isAdmin) {
+          navigate("/admin"); // Admin goes to admin panel
+        } else {
+          navigate("/dashboard"); // Regular users go to user dashboard
+        }
+      }, 1000);
     } catch (err) {
       console.error(err);
-      setMessage(err.response?.data?.message || 'Cannot connect to server.');
+
+      const errMsg =
+        err.response?.data?.message || "Cannot connect to server.";
+      setMessage(errMsg);
     }
   };
 
-  const alertClass = message.includes('successful') ? 'alert-success' : 'alert-danger';
+  const alertClass = message.includes("successful")
+    ? "alert-success"
+    : "alert-danger";
 
   return (
     <div className="floral-login d-flex justify-content-center align-items-center vh-100">
-      <div className="card p-4 shadow-lg" style={{ maxWidth: '400px', width: '100%' }}>
+      <div
+        className="card p-4 shadow-lg"
+        style={{ maxWidth: "400px", width: "100%" }}
+      >
         <h2 className="h3 text-center mb-4 fw-bold">User Login</h2>
 
         {message && (
@@ -77,8 +99,8 @@ const Login = ({ onLogin }) => {
             Don't have an account?
             <span
               className="text-primary text-decoration-underline ms-1"
-              style={{ cursor: 'pointer' }}
-              onClick={() => navigate('/register')}
+              style={{ cursor: "pointer" }}
+              onClick={() => navigate("/register")}
             >
               Register here
             </span>
