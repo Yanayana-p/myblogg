@@ -23,6 +23,7 @@ import Footer from './components/Footer.js';
 import FirstFull from './pages/FirstFull.js';
 import MongovsSQL from './pages/MongovsSQL.js';
 import Mistakes from './pages/Mistakes.js';
+import AdminPost from './pages/AdminPost.js';
 
 // SESSION FUNCTIONS
 function getSessionUser() {
@@ -90,6 +91,7 @@ export default function App() {
           <Route path="/post/first-fullstack-app" element={<FirstFull />} />
           <Route path="/post/mongodb-vs-sql" element={<MongovsSQL />} />
           <Route path="/post/web-dev-mistakes" element={<Mistakes />} />
+          <Route path ="/post/:id" element={<AdminPost />} />
 
           {/* LOGIN / REGISTER */}
           <Route

@@ -1,9 +1,11 @@
 import "../components/HomePage.css";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import api from "../api"; // Axios instance pointing to backend
 
 export default function HomePage() {
-
-  const featuredPosts = [
+  // Static featured posts (first three)
+  const staticFeaturedPosts = [
     {
       id: 1,
       title: "What I Learned Building My First Full-Stack App",
@@ -27,6 +29,34 @@ export default function HomePage() {
     },
   ];
 
+  const [featuredPosts, setFeaturedPosts] = useState(staticFeaturedPosts);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAdminPosts = async () => {
+      try {
+        const res = await api.get("/posts");
+        const adminPosts = (res.data.posts || [])
+          .filter(post => post.published) 
+          .map(post => ({
+            id: post._id,
+            title: post.title,
+            excerpt: post.content.length > 100 ? post.content.substring(0, 100) + "..." : post.content,
+            link: `/post/${post._id}`, 
+          }));
+
+        
+        setFeaturedPosts([...adminPosts, ...staticFeaturedPosts]);
+      } catch (err) {
+        console.error("Failed to fetch admin posts:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAdminPosts();
+  }, []);
+
   return (
     <div className="homepage">
 
@@ -38,12 +68,14 @@ export default function HomePage() {
             A student’s journey through code, creativity, and continuous learning.
           </p>
 
-          <Link
-            to={featuredPosts[0].link}
-            className="btn btn-light btn-lg rounded-pill px-4"
-          >
-            Explore Blog
-          </Link>
+          {featuredPosts[0] && (
+            <Link
+              to={featuredPosts[0].link}
+              className="btn btn-light btn-lg rounded-pill px-4"
+            >
+              Explore Blog
+            </Link>
+          )}
         </div>
       </section>
 
@@ -61,24 +93,28 @@ export default function HomePage() {
       <section className="featured-section container">
         <h2 className="section-title">Featured Posts</h2>
 
-        <div className="row g-4">
-          {featuredPosts.map((post) => (
-            <div key={post.id} className="col-md-4">
-              <div className="post-card">
-                <h5>{post.title}</h5>
-
-                <p>{post.excerpt}</p>
-
-                <Link
-                  to={post.link}
-                  className="btn btn-outline-primary btn-sm rounded-pill"
-                >
-                  Read More →
-                </Link>
-              </div>
+        {loading ? (
+          <p>Loading featured posts...</p>
+        ) : (
+          <div className="featured-slider-wrapper">
+            <div className="featured-slider">
+              {featuredPosts.map(post => (
+                <div key={post.id} className="col-md-4">
+                  <div className="post-card">
+                    <h5>{post.title}</h5>
+                    <p>{post.excerpt}</p>
+                    <Link
+                      to={post.link}
+                      className="btn btn-outline-primary btn-sm rounded-pill"
+                    >
+                      Read More →
+                    </Link>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
+        )}
       </section>
 
       {/* CATEGORIES */}

@@ -82,6 +82,28 @@
   box-shadow: 18px 18px 0px #2b2b2b;
 }
 
+.featured-slider {
+  display: flex;            /* horizontal row */
+  overflow-x: auto;         /* scrollable left-right */
+  gap: 1rem;                /* space between cards */
+  padding: 1rem 0;
+  scroll-behavior: smooth;  /* smooth scrolling */
+}
+
+.featured-slider::-webkit-scrollbar {
+  height: 8px;              /* horizontal scrollbar */
+}
+
+.featured-slider::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.2);
+  border-radius: 4px;
+}
+
+.featured-card {
+  flex: 0 0 300px;          /* fixed width per card */
+}
+
+
 /* CATEGORIES - The "Pill" Grid */
 .categories-section {
   background: #fdf6e3;

@@ -7,7 +7,8 @@ const { ObjectId } = require("mongodb");
 function requireAdmin(req, res, next) {
   try {
     const user = JSON.parse(req.headers["x-user"] || "{}");
-    if (!user.isAdmin) return res.status(403).json({ message: "Forbidden: Admins only" });
+    if (!user.isAdmin)
+      return res.status(403).json({ message: "Forbidden: Admins only" });
     next();
   } catch (err) {
     res.status(403).json({ message: "Forbidden: Admins only" });
@@ -22,7 +23,11 @@ router.get("/", async (req, res) => {
     const user = JSON.parse(req.headers["x-user"] || "{}");
     const query = user.isAdmin ? {} : { published: true };
 
-    const posts = await db.collection("posts").find(query).sort({ createdAt: -1 }).toArray();
+    const posts = await db
+      .collection("posts")
+      .find(query)
+      .sort({ createdAt: -1 })
+      .toArray();
     res.json({ posts });
   } catch (err) {
     console.error(err);
@@ -30,11 +35,31 @@ router.get("/", async (req, res) => {
   }
 });
 
+// GET a single post by ID
+router.get("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!ObjectId.isValid(id))
+      return res.status(400).json({ message: "Invalid post ID" });
 
+    const db = getDB();
+    const post = await db.collection("posts").findOne({ _id: new ObjectId(id) });
+
+    if (!post) return res.status(404).json({ message: "Post not found" });
+
+    res.json({ post });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// CREATE a new post (admin only)
 router.post("/", requireAdmin, async (req, res) => {
   try {
     const { title, content, published } = req.body;
-    if (!title || !content) return res.status(400).json({ message: "Title & content required" });
+    if (!title || !content)
+      return res.status(400).json({ message: "Title & content required" });
 
     const db = getDB();
     const result = await db.collection("posts").insertOne({
@@ -51,13 +76,14 @@ router.post("/", requireAdmin, async (req, res) => {
   }
 });
 
-// PATCH update a post (admin only)
+// UPDATE a post (admin only)
 router.patch("/:id", requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     const { title, content, published } = req.body;
 
-    if (!ObjectId.isValid(id)) return res.status(400).json({ message: "Invalid post ID" });
+    if (!ObjectId.isValid(id))
+      return res.status(400).json({ message: "Invalid post ID" });
     if (!title && !content && published === undefined)
       return res.status(400).json({ message: "Nothing to update" });
 
@@ -67,9 +93,11 @@ router.patch("/:id", requireAdmin, async (req, res) => {
     if (content) updateData.content = content;
     if (published !== undefined) updateData.published = !!published;
 
-    await db.collection("posts").updateOne({ _id: new ObjectId(id) }, { $set: updateData });
+    await db.collection("posts").updateOne(
+      { _id: new ObjectId(id) },
+      { $set: updateData }
+    );
 
-    // Return the updated post
     const updatedPost = await db.collection("posts").findOne({ _id: new ObjectId(id) });
     res.json({ message: "Post updated", post: updatedPost });
   } catch (err) {
@@ -83,7 +111,8 @@ router.delete("/:id", requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
 
-    if (!ObjectId.isValid(id)) return res.status(400).json({ message: "Invalid post ID" });
+    if (!ObjectId.isValid(id))
+      return res.status(400).json({ message: "Invalid post ID" });
 
     const db = getDB();
     await db.collection("posts").deleteOne({ _id: new ObjectId(id) });
