@@ -36,6 +36,13 @@ export default function AppNavbar({ currentUser }) {
             <Link className="nav-link" to="/contact">Contact</Link>
           </li>
 
+          {/* Show Dashboard link for normal users */}
+          {currentUser && !currentUser.isAdmin && (
+            <li className="nav-item">
+              <Link className="nav-link" to="/dashboard">Dashboard</Link>
+            </li>
+          )}
+
           {/* Show Admin link only for admins */}
           {currentUser?.isAdmin && (
             <li className="nav-item">
